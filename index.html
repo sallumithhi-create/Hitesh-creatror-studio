@@ -48,6 +48,9 @@ footer{text-align:center;padding:25px;color:var(--muted);border-top:1px solid va
 <div><label for="thumbTitle">Thumbnail text</label><input id="thumbTitle" value="MY NEW VIDEO!">
 <label for="thumbSub">Small subtitle</label><input id="thumbSub" value="WATCH NOW">
 <label for="thumbColor">Background colour</label><input id="thumbColor" type="color" value="#5638c9">
+<label for="thumbStyle">Professional template</label><select id="thumbStyle"><option value="cinema">Cinematic Glow</option><option value="breaking">Breaking News</option><option value="vlog">Vlog Pop</option><option value="clean">Clean Professional</option></select>
+<label for="thumbTextColor">Text colour</label><input id="thumbTextColor" type="color" value="#ffffff">
+<label for="thumbBadge">Small badge (optional)</label><input id="thumbBadge" placeholder="NEW VIDEO">
 <label for="photo">Upload background photo (optional)</label><input id="photo" type="file" accept="image/*">
 <div class="actions"><button id="drawThumb">Update thumbnail</button><button class="secondary" id="downloadThumb">Download PNG</button></div>
 </div>
@@ -82,16 +85,23 @@ $('generate').addEventListener('click',makeSEO);
 let photoImage=null;
 $('photo').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const url=URL.createObjectURL(f);const img=new Image();img.onload=()=>{photoImage=img;drawThumbnail()};img.src=url});
 function drawThumbnail(){
- const c=$('thumb'),ctx=c.getContext('2d'),color=$('thumbColor').value;
- if(photoImage){const scale=Math.max(c.width/photoImage.width,c.height/photoImage.height),w=photoImage.width*scale,h=photoImage.height*scale;ctx.drawImage(photoImage,(c.width-w)/2,(c.height-h)/2,w,h);ctx.fillStyle='rgba(0,0,0,.48)';ctx.fillRect(0,0,c.width,c.height)}
- else{const g=ctx.createLinearGradient(0,0,c.width,c.height);g.addColorStop(0,color);g.addColorStop(1,'#10182f');ctx.fillStyle=g;ctx.fillRect(0,0,c.width,c.height)}
- ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(0,0,c.width,c.height);
- const title=clean($('thumbTitle').value)||'YOUR VIDEO';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#000';ctx.shadowBlur=18;ctx.fillStyle='#fff';ctx.font='900 92px system-ui';let lines=[];let line='';for(const word of title.split(' ')){const test=line?line+' '+word:word;if(ctx.measureText(test).width>1080&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);lines=lines.slice(0,3);const start=360-(lines.length-1)*58;lines.forEach((t,i)=>ctx.fillText(t,640,start+i*116,1100));ctx.shadowBlur=0;
- const sub=clean($('thumbSub').value);if(sub){ctx.fillStyle='#35d7d0';ctx.font='800 34px system-ui';ctx.fillText(sub.toUpperCase(),640,620,1100)}
+ const c=$('thumb'),ctx=c.getContext('2d'),color=$('thumbColor').value,style=$('thumbStyle').value,textColor=$('thumbTextColor').value,w=c.width,h=c.height;
+ ctx.clearRect(0,0,w,h);
+ if(photoImage){const scale=Math.max(w/photoImage.width,h/photoImage.height),iw=photoImage.width*scale,ih=photoImage.height*scale;ctx.drawImage(photoImage,(w-iw)/2,(h-ih)/2,iw,ih)}
+ else{const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,color);g.addColorStop(1,'#07152d');ctx.fillStyle=g;ctx.fillRect(0,0,w,h)}
+ const shade=ctx.createLinearGradient(0,0,w,0);shade.addColorStop(0,'rgba(0,0,0,.05)');shade.addColorStop(.45,'rgba(0,0,0,.28)');shade.addColorStop(1,'rgba(0,0,0,.78)');ctx.fillStyle=shade;ctx.fillRect(0,0,w,h);
+ if(style==='breaking'){ctx.fillStyle='#e51d35';ctx.fillRect(0,0,w,105);ctx.fillStyle='#fff';ctx.font='900 38px system-ui';ctx.textAlign='left';ctx.fillText('LATEST UPDATE',55,68)}
+ if(style==='vlog'){ctx.fillStyle='#ffd42a';ctx.beginPath();ctx.moveTo(0,570);ctx.lineTo(w,510);ctx.lineTo(w,720);ctx.lineTo(0,720);ctx.closePath();ctx.fill()}
+ if(style==='clean'){ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=7;ctx.strokeRect(28,28,w-56,h-56)}
+ const title=clean($('thumbTitle').value)||'YOUR VIDEO';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';let fs=style==='clean'?82:100;ctx.font='900 '+fs+'px system-ui';while(ctx.measureText(title).width>1040&&fs>42){fs-=4;ctx.font='900 '+fs+'px system-ui'}
+ let lines=[],line='';for(const word of title.split(' ')){const test=line?line+' '+word:word;if(ctx.measureText(test).width>1030&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);lines=lines.slice(0,3);
+ const y=style==='vlog'?300:350-(lines.length-1)*58;ctx.shadowColor='#000';ctx.shadowBlur=style==='clean'?5:22;ctx.lineWidth=12;ctx.strokeStyle='#101010';ctx.fillStyle=textColor;lines.forEach((t,i)=>{ctx.strokeText(t,640,y+i*112,1080);ctx.fillText(t,640,y+i*112,1080)});ctx.shadowBlur=0;
+ const sub=clean($('thumbSub').value);if(sub){ctx.fillStyle=style==='vlog'?'#111':'#35d7d0';ctx.font='900 34px system-ui';ctx.fillText(sub.toUpperCase(),640,620,1080)}
+ const badge=clean($('thumbBadge').value);if(badge){ctx.fillStyle='#ffcf24';ctx.fillRect(880,130,330,58);ctx.fillStyle='#111';ctx.font='900 25px system-ui';ctx.fillText(badge.toUpperCase(),1045,160,300)}
 }
 $('drawThumb').addEventListener('click',drawThumbnail);
 $('downloadThumb').addEventListener('click',()=>{drawThumbnail();const a=document.createElement('a');a.download='hitesh-creator-thumbnail.png';a.href=$('thumb').toDataURL('image/png');a.click()});
-$('thumbTitle').addEventListener('input',drawThumbnail);$('thumbSub').addEventListener('input',drawThumbnail);$('thumbColor').addEventListener('input',drawThumbnail);
+$('thumbTitle').addEventListener('input',drawThumbnail);$('thumbSub').addEventListener('input',drawThumbnail);$('thumbColor').addEventListener('input',drawThumbnail);$('thumbStyle').addEventListener('change',drawThumbnail);$('thumbTextColor').addEventListener('input',drawThumbnail);$('thumbBadge').addEventListener('input',drawThumbnail);
 $('year').textContent=new Date().getFullYear();drawThumbnail();
 </script>
 </body>
