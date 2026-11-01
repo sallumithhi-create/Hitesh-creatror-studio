@@ -37,6 +37,7 @@ footer{text-align:center;padding:25px;color:var(--muted);border-top:1px solid va
 <h2>✨ YouTube SEO Generator</h2><p class="sub">Enter any topic to create a short title, detailed description, many keywords and relevant hashtags.</p>
 <label for="topic">Video topic</label><input id="topic" placeholder="Example: How to make a viral mini vlog">
 <label for="lang">Output language</label><select id="lang"><option value="English">English</option><option value="Hindi">Hindi</option><option value="Hinglish">Hinglish</option></select>
+<label for="contentType">Video type</label><select id="contentType"><option value="shorts">YouTube Shorts</option><option value="vlog">Daily / Mini Vlog</option><option value="tutorial">How-to / Tutorial</option><option value="long">Long video</option></select>
 <label for="channel">Channel name (optional)</label><input id="channel" placeholder="Hitesh ka daily vlog">
 <button id="generate">Generate SEO</button>
 <div class="output" id="seoOutput" aria-live="polite"></div>
@@ -75,22 +76,25 @@ footer{text-align:center;padding:25px;color:var(--muted);border-top:1px solid va
 const $=id=>document.getElementById(id);
 const clean=s=>s.trim().replace(/\s+/g,' ');
 function makeSEO(){
- const topic=clean($('topic').value),lang=$('lang').value,channel=clean($('channel').value);
+ const topic=clean($('topic').value),lang=$('lang').value,channel=clean($('channel').value),type=$('contentType').value;
  if(!topic){$('seoOutput').innerHTML='<div class="status">Please enter your video topic first.</div>';return}
- const words=topic.split(' ').filter(Boolean),short=words.slice(0,6).join(' '),slug=topic.toLowerCase().replace(/[^a-z0-9 ]/g,' ').trim().replace(/\s+/g,'');
- const title=lang==='Hindi'?short+' | पूरी जानकारी':lang==='Hinglish'?short+' | Must Watch!':short+' | Complete Guide';
- const description=lang==='Hindi'
- ?'इस वीडियो में '+topic+' के बारे में आसान और उपयोगी जानकारी मिलेगी। वीडियो को अंत तक जरूर देखें ताकि आपको पूरी बात समझ आ सके।\n\nअगर वीडियो पसंद आए तो Like करें, अपने दोस्तों के साथ Share करें और ऐसे ही नए वीडियो के लिए Channel को Subscribe करें।\n\nआपकी राय Comment में जरूर बताएं। धन्यवाद!'
- :lang==='Hinglish'
- ?'Is video mein hum '+topic+' ke baare mein detail mein baat karenge. Video ko end tak zaroor dekhein aur jo useful lage use apne friends ke saath share karein.\n\nVideo pasand aaye to Like karein, Comment mein apni rai batayein aur aise hi videos ke liye Channel Subscribe karein. Thank you for watching!'
- :'In this video, we take a closer look at '+topic+'. Watch until the end for the key points, useful details and a simple explanation.\n\nIf you find this video helpful, please LIKE, SHARE it with friends and SUBSCRIBE for more videos. Leave your thoughts in the comments — your feedback helps this channel grow. Thanks for watching!';
- const extras=['youtube','youtube video','youtube shorts','shorts video','viral video','trending video','latest video','new video','video update','how to','tips and tricks','complete guide','explained','step by step','beginner guide','hindi','india','creator','daily vlog','mini vlog','vlog video','entertainment','informative video','must watch','popular topic','2026'];
- const candidates=[...words,...topic.split(/\s+/).map(x=>x.toLowerCase()),...extras];
- const keywords=[...new Set(candidates.map(x=>x.toLowerCase().trim()).filter(x=>x.length>1))].slice(0,35).join(', ');
- const topicTag=words.slice(0,3).join('').replace(/[^a-z0-9]/gi,'');
- const tags=[topicTag?'#'+topicTag:'', '#'+words[0].replace(/[^a-z0-9]/gi,''), '#YouTube', '#Shorts', '#Trending', '#ViralVideo', '#NewVideo', '#Hindi', '#India', '#Creator', '#Video', '#YouTubeShorts', '#Explore', '#MustWatch', channel?'#'+channel.replace(/\s+/g,''):''].filter(Boolean);
- const hashtags=[...new Set(tags)].slice(0,12).join(' ');
- const items=[['TITLE',title],['DESCRIPTION',description+(channel?'\n\nChannel: '+channel:'')],['KEYWORDS (up to 35)',keywords],['HASHTAGS',hashtags]];
+ const words=topic.split(' ').filter(Boolean),short=words.slice(0,7).join(' ');
+ const typeName={shorts:'YouTube Shorts',vlog:'Daily / Mini Vlog',tutorial:'How-to Tutorial',long:'Long Video'}[type];
+ const titleEnd={shorts:{English:' | #Shorts',Hindi:' | शॉर्ट्स वीडियो',Hinglish:' | Shorts Video'},vlog:{English:' | Mini Vlog',Hindi:' | मिनी व्लॉग',Hinglish:' | Mini Vlog'},tutorial:{English:' | Step-by-Step Guide',Hindi:' | आसान तरीका',Hinglish:' | Step-by-Step'},long:{English:' | Full Guide',Hindi:' | पूरी जानकारी',Hinglish:' | Full Details'}};
+ const title=short+(titleEnd[type][lang]||'');
+ const intro=lang==='Hindi'?'इस वीडियो में हम "'+topic+'" को आसान भाषा में समझेंगे। आपको विषय से जुड़ी जरूरी बातें, उपयोगी जानकारी और देखने लायक मुख्य पॉइंट मिलेंगे।':lang==='Hinglish'?'Is video mein hum "'+topic+'" ko simple aur clear way mein cover karenge. Aapko useful points, important details aur practical information milegi.':'In this video, we explore "'+topic+'" with clear explanations, useful details and practical points you can take away.';
+ const typeLine=lang==='Hindi'?'यह '+typeName+' वीडियो है।':lang==='Hinglish'?'Yeh '+typeName+' hai.':'This video is made as a '+typeName+'.';
+ const cta=lang==='Hindi'?'वीडियो पसंद आए तो Like करें, अपनी राय Comment में बताएं और ऐसे ही वीडियो के लिए Subscribe करें।':lang==='Hinglish'?'Video helpful lage to Like karein, comment mein apni rai batayein aur aise videos ke liye Subscribe karein.':'If this video helps you, Like, share your thoughts in the comments and Subscribe for more useful videos.';
+ const description=intro+'\n\n'+typeLine+'\n\n'+cta+'\n\n'+(channel?(lang==='Hindi'?'चैनल: ': 'Channel: ')+channel+'\n\n':'')+(lang==='Hindi'?'ध्यान दें: वीडियो में वही जानकारी रखें जो वास्तव में दिखाई गई है।':lang==='Hinglish'?'Tip: Description ko apne actual video ke hisaab se edit zaroor karein.':'Tip: Edit this description to match what your video actually contains.');
+ const base={shorts:['youtube shorts','short video','shorts content','vertical video','quick tips'],vlog:['daily vlog','mini vlog','day in my life','daily routine vlog','lifestyle vlog'],tutorial:['how to','step by step tutorial','beginner guide','tips and tricks','learn online'],long:['complete guide','detailed explanation','full video','in depth guide','informative video']}[type];
+ const languageTerms=lang==='Hindi'?['hindi video','हिंदी जानकारी','हिंदी में समझें']:lang==='Hinglish'?['hinglish video','hindi english','easy explanation']:['english video','explained in english','beginner friendly'];
+ const keywords=[...new Set([...words,...[topic,topic+' '+typeName.toLowerCase(),...base,...languageTerms,'youtube video','video topic','content creator'].map(x=>x.toLowerCase().trim())])].filter(x=>x.length>1).slice(0,35).join(', ');
+ const cleanTag=x=>x.toLowerCase().replace(/[^a-z0-9]/g,'');
+ const topicTags=words.slice(0,3).map(cleanTag).filter(x=>x.length>2).map(x=>'#'+x);
+ const typeTags={shorts:['#YouTubeShorts','#Shorts'],vlog:['#MiniVlog','#DailyVlog'],tutorial:['#HowTo','#Tutorial'],long:['#YouTubeVideo','#FullGuide']}[type];
+ const langTags=lang==='Hindi'?['#HindiVideo','#Hindi']:lang==='Hinglish'?['#Hinglish','#Hindi']:['#English','#Learn'];
+ const hashtags=[...new Set([...topicTags,...typeTags,...langTags,'#YouTube'])].slice(0,12).join(' ');
+ const items=[['TITLE',title],['DESCRIPTION',description],['KEYWORDS (up to 35)',keywords],['RELEVANT HASHTAGS',hashtags]];
  $('seoOutput').innerHTML=items.map(([k,v])=>'<div><div class="outhead"><span>'+k+'</span><button class="copy" data-copy="'+encodeURIComponent(v)+'">Copy</button></div><div class="outbox"></div></div>').join('');
  [...$('seoOutput').querySelectorAll('.outbox')].forEach((el,i)=>el.textContent=items[i][1]);
 }
