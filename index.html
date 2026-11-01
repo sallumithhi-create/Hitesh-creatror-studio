@@ -58,7 +58,15 @@ footer{text-align:center;padding:25px;color:var(--muted);border-top:1px solid va
 </div>
 <p class="note">Tip: Keep thumbnail text short and easy to read on a phone.</p>
 </section>
-<section class="card"><h2>📝 Quick title tips</h2><p class="sub">A useful checklist before publishing.</p><ul style="color:#dce4ff;padding-left:20px"><li>Put the main topic near the beginning.</li><li>Make the promise clear and honest.</li><li>Avoid misleading clickbait.</li><li>Use a clear face or subject in the thumbnail.</li></ul></section>
+<section class="card wide" id="aiPromptStudio">
+<h2>🤖 Free AI Thumbnail Prompt Builder</h2><p class="sub">अपना वीडियो टॉपिक लिखें और प्रोफेशनल AI thumbnail बनाने के लिए तैयार prompt पाएँ। कोई API key या payment नहीं।</p>
+<label for="aiTopic">वीडियो किस बारे में है?</label><input id="aiTopic" placeholder="जैसे: मेरी पहली कॉलेज व्लॉग">
+<label for="aiSubject">फोटो में क्या दिखाना है?</label><input id="aiSubject" placeholder="जैसे: मेरी अपलोड की हुई फोटो, हैरान चेहरा">
+<label for="aiStyle">Thumbnail style</label><select id="aiStyle"><option value="cinematic YouTube thumbnail, dramatic lighting, vibrant colors">Cinematic Viral</option><option value="clean professional YouTube thumbnail, premium studio lighting">Professional Clean</option><option value="high energy vlog thumbnail, bold colors, expressive emotion">Vlog Style</option><option value="photorealistic documentary thumbnail, dramatic atmosphere">Realistic Story</option></select>
+<label for="aiWords">Thumbnail पर लिखने वाले शब्द (optional)</label><input id="aiWords" placeholder="जैसे: COLLEGE LIFE">
+<button id="makePrompt">Create AI Prompt</button><div class="output" id="aiPromptOutput" aria-live="polite"></div>
+<p class="note">यह टूल prompt तैयार करता है; image generation के लिए इसे ChatGPT Image या किसी image generator में paste करें। वेबसाइट में कोई paid AI API नहीं जोड़ी गई है।</p>
+</section><section class="card"><h2>📝 Quick title tips</h2><p class="sub">A useful checklist before publishing.</p><ul style="color:#dce4ff;padding-left:20px"><li>Put the main topic near the beginning.</li><li>Make the promise clear and honest.</li><li>Avoid misleading clickbait.</li><li>Use a clear face or subject in the thumbnail.</li></ul></section>
 <section class="card"><h2>📈 Before you publish</h2><p class="sub">A simple upload checklist.</p><ul style="color:#dce4ff;padding-left:20px"><li>Check spelling in title and description.</li><li>Add only relevant keywords and hashtags.</li><li>Choose the correct audience setting.</li><li>Review the thumbnail on mobile size.</li></ul></section>
 </div>
 </main>
@@ -82,6 +90,15 @@ function makeSEO(){
 }
 async function copyText(text,btn){try{await navigator.clipboard.writeText(text);btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1200)}catch(e){btn.textContent='Select and copy';}}
 $('generate').addEventListener('click',makeSEO);
+$('makePrompt').addEventListener('click',()=>{
+ const topic=clean($('aiTopic').value),subject=clean($('aiSubject').value)||'the person or main subject from my reference photo',style=$('aiStyle').value,words=clean($('aiWords').value);
+ if(!topic){$('aiPromptOutput').innerHTML='<div class="status">पहले वीडियो का टॉपिक लिखें।</div>';return}
+ const prompt='Create a high-click-through-rate YouTube thumbnail in 16:9 landscape format (1280x720). Video topic: '+topic+'. Main subject: '+subject+'. Visual style: '+style+'. Composition: place the main subject prominently on the left third, keep the right side clear for bold readable headline text, use strong subject separation, crisp realistic details, expressive emotion, balanced contrast, professional DSLR look, bright polished colors, clean uncluttered background. '+(words?'Include the exact headline text "'+words+'" with perfect spelling, large bold typography. ':'Do not add any text, letters, logos, watermarks or timestamps. ')+'Make it instantly understandable on a mobile screen. Do not distort the face or change the identity of a reference person.';
+ $('aiPromptOutput').innerHTML='<div><div class="outhead"><span>YOUR AI THUMBNAIL PROMPT</span><button class="copy" id="copyAiPrompt">Copy prompt</button></div><div class="outbox" id="aiPromptText"></div></div>';
+ $('aiPromptText').textContent=prompt;
+ $('copyAiPrompt').addEventListener('click',()=>copyText(prompt,$('copyAiPrompt')));
+});
+
 let photoImage=null;
 $('photo').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const url=URL.createObjectURL(f);const img=new Image();img.onload=()=>{photoImage=img;drawThumbnail()};img.src=url});
 function drawThumbnail(){
