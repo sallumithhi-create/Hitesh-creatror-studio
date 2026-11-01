@@ -34,13 +34,13 @@ footer{text-align:center;padding:25px;color:var(--muted);border-top:1px solid va
 <section class="hero"><div class="eyebrow">Creator toolkit</div><h1>Make your next video <em>stand out.</em></h1><p>Create video title ideas, descriptions, keywords and hashtags, then design a simple 16:9 thumbnail. Free to use in your browser.</p></section>
 <div class="tools">
 <section class="card wide">
-<h2>✨ YouTube SEO Generator</h2><p class="sub">Enter your video topic and choose a language to create a useful SEO draft.</p>
+<h2>✨ YouTube SEO Generator</h2><p class="sub">Enter any topic to create a short title, detailed description, many keywords and relevant hashtags.</p>
 <label for="topic">Video topic</label><input id="topic" placeholder="Example: How to make a viral mini vlog">
 <label for="lang">Output language</label><select id="lang"><option value="English">English</option><option value="Hindi">Hindi</option><option value="Hinglish">Hinglish</option></select>
 <label for="channel">Channel name (optional)</label><input id="channel" placeholder="Hitesh ka daily vlog">
 <button id="generate">Generate SEO</button>
 <div class="output" id="seoOutput" aria-live="polite"></div>
-<p class="note">Note: This free version creates template-based suggestions in your browser. It does not fetch live YouTube trends or guarantee views.</p>
+<p class="note">Note: This free tool creates SEO suggestions from your topic. It does not verify live YouTube trends or guarantee viral reach. Always keep only keywords and hashtags that truly match your video.</p>
 </section>
 <section class="card wide">
 <h2>🎨 Thumbnail Maker</h2><p class="sub">Create a basic 16:9 thumbnail. Add your own photo as the background if you like.</p>
@@ -77,16 +77,22 @@ const clean=s=>s.trim().replace(/\s+/g,' ');
 function makeSEO(){
  const topic=clean($('topic').value),lang=$('lang').value,channel=clean($('channel').value);
  if(!topic){$('seoOutput').innerHTML='<div class="status">Please enter your video topic first.</div>';return}
- const words=topic.split(' ').filter(Boolean),short=words.slice(0,7).join(' ');
- const title=lang==='Hindi'?topic+' | शानदार वीडियो जरूर देखें':lang==='Hinglish'?topic+' | Full Video | Hitesh Vlog':topic+' | Tips, Ideas & Guide';
- const description=lang==='Hindi'?'इस वीडियो में हम '+topic+' के बारे में जानेंगे। वीडियो पसंद आए तो Like, Share और Subscribe करें।':lang==='Hinglish'?'Aaj ke video mein '+topic+' ke baare mein baat karenge. Video pasand aaye to Like, Share aur Subscribe karein.':'In this video, we explore '+topic+'. Watch till the end, and if you find it helpful, like, share and subscribe for more videos.';
- const base=[...words, 'youtube video', 'youtube shorts', 'video ideas', 'creator tips', 'vlog'];
- const keywords=[...new Set(base.map(x=>x.toLowerCase()))].slice(0,15).join(', ');
- const tags=['#'+words.slice(0,3).join('').replace(/[^a-z0-9]/gi,''),'#YouTube','#Shorts','#VideoIdeas','#'+(channel||'CreatorStudio').replace(/\s+/g,'')].join(' ');
- const items=[['TITLE',title],['DESCRIPTION',description+(channel?'\n\nChannel: '+channel:'')],['KEYWORDS',keywords],['HASHTAGS',tags]];
+ const words=topic.split(' ').filter(Boolean),short=words.slice(0,6).join(' '),slug=topic.toLowerCase().replace(/[^a-z0-9 ]/g,' ').trim().replace(/\s+/g,'');
+ const title=lang==='Hindi'?short+' | पूरी जानकारी':lang==='Hinglish'?short+' | Must Watch!':short+' | Complete Guide';
+ const description=lang==='Hindi'
+ ?'इस वीडियो में '+topic+' के बारे में आसान और उपयोगी जानकारी मिलेगी। वीडियो को अंत तक जरूर देखें ताकि आपको पूरी बात समझ आ सके।\n\nअगर वीडियो पसंद आए तो Like करें, अपने दोस्तों के साथ Share करें और ऐसे ही नए वीडियो के लिए Channel को Subscribe करें।\n\nआपकी राय Comment में जरूर बताएं। धन्यवाद!'
+ :lang==='Hinglish'
+ ?'Is video mein hum '+topic+' ke baare mein detail mein baat karenge. Video ko end tak zaroor dekhein aur jo useful lage use apne friends ke saath share karein.\n\nVideo pasand aaye to Like karein, Comment mein apni rai batayein aur aise hi videos ke liye Channel Subscribe karein. Thank you for watching!'
+ :'In this video, we take a closer look at '+topic+'. Watch until the end for the key points, useful details and a simple explanation.\n\nIf you find this video helpful, please LIKE, SHARE it with friends and SUBSCRIBE for more videos. Leave your thoughts in the comments — your feedback helps this channel grow. Thanks for watching!';
+ const extras=['youtube','youtube video','youtube shorts','shorts video','viral video','trending video','latest video','new video','video update','how to','tips and tricks','complete guide','explained','step by step','beginner guide','hindi','india','creator','daily vlog','mini vlog','vlog video','entertainment','informative video','must watch','popular topic','2026'];
+ const candidates=[...words,...topic.split(/\s+/).map(x=>x.toLowerCase()),...extras];
+ const keywords=[...new Set(candidates.map(x=>x.toLowerCase().trim()).filter(x=>x.length>1))].slice(0,35).join(', ');
+ const topicTag=words.slice(0,3).join('').replace(/[^a-z0-9]/gi,'');
+ const tags=[topicTag?'#'+topicTag:'', '#'+words[0].replace(/[^a-z0-9]/gi,''), '#YouTube', '#Shorts', '#Trending', '#ViralVideo', '#NewVideo', '#Hindi', '#India', '#Creator', '#Video', '#YouTubeShorts', '#Explore', '#MustWatch', channel?'#'+channel.replace(/\s+/g,''):''].filter(Boolean);
+ const hashtags=[...new Set(tags)].slice(0,12).join(' ');
+ const items=[['TITLE',title],['DESCRIPTION',description+(channel?'\n\nChannel: '+channel:'')],['KEYWORDS (up to 35)',keywords],['HASHTAGS',hashtags]];
  $('seoOutput').innerHTML=items.map(([k,v])=>'<div><div class="outhead"><span>'+k+'</span><button class="copy" data-copy="'+encodeURIComponent(v)+'">Copy</button></div><div class="outbox"></div></div>').join('');
  [...$('seoOutput').querySelectorAll('.outbox')].forEach((el,i)=>el.textContent=items[i][1]);
- $('seoOutput').querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>copyText(decodeURIComponent(b.dataset.copy),b)));
 }
 async function copyText(text,btn){try{await navigator.clipboard.writeText(text);btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1200)}catch(e){btn.textContent='Select and copy';}}
 $('generate').addEventListener('click',makeSEO);
