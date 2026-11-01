@@ -1,18 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hitesh Creator Studio - YouTube SEO Tools</title>
-  <meta name="google-site-verification" content="4eR14t2AbyKA9hXT9usqcRTqbdgyVtSEOmq08MYLNUM" />
-  <meta name="description" content="Hitesh Creator Studio offers free YouTube SEO tools to generate video titles, descriptions, keywords and hashtags.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hitesh Creator Studio | Free YouTube Creator Tools</title>
+<meta name="google-site-verification" content="4eR14t2AbyKA9hXT9usqcRTqbdgyVtSEOmq08MYLNUM">
+<meta name="description" content="Free YouTube creator tools: video title, description, keywords, hashtags and thumbnail maker.">
+<meta name="theme-color" content="#101426">
+<style>
+:root{--bg:#0b1020;--panel:#151d33;--panel2:#1b2742;--text:#f5f7ff;--muted:#aab5d0;--accent:#7c5cff;--cyan:#35d7d0;--line:#2a3655}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#25204d 0,transparent 32%),var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:26px max(20px,calc((100% - 1100px)/2));border-bottom:1px solid var(--line);background:#0b1020cc;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{font-size:22px;font-weight:850;letter-spacing:.2px}.brand span{color:var(--cyan)}.tag{color:var(--muted);font-size:13px;margin-top:3px}
+main{max-width:1100px;margin:auto;padding:34px 20px 70px}.hero{padding:28px 0 26px}.eyebrow{color:var(--cyan);font-weight:750;text-transform:uppercase;letter-spacing:1.6px;font-size:12px}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.08;margin:10px 0}h1 em{font-style:normal;color:#9c8aff}.hero p{color:var(--muted);max-width:650px;margin:12px 0 0}
+.tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{background:linear-gradient(145deg,var(--panel),#11182b);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 16px 40px #0002}.wide{grid-column:1/-1}
+h2{font-size:21px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+label{display:block;font-size:13px;font-weight:700;margin:13px 0 6px;color:#dce4ff}
+input,textarea,select{width:100%;border:1px solid #34415f;border-radius:10px;padding:12px 13px;background:#0c1428;color:var(--text);font:inherit;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #7c5cff25}textarea{min-height:88px;resize:vertical}
+button{border:0;border-radius:10px;padding:11px 16px;background:linear-gradient(90deg,var(--accent),#5c8cff);color:white;font-weight:750;font-size:14px;cursor:pointer;margin-top:14px}
+button.secondary{background:#263451;border:1px solid #3b4b70}button:active{transform:scale(.98)}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.output{margin-top:15px;display:grid;gap:10px}.outbox{background:#0c1428;border:1px solid var(--line);padding:12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}.outhead{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-weight:750;color:#cbd6f5}.copy{margin:0;padding:6px 10px;font-size:12px;background:#263451}
+.preview-wrap{background:#080d19;border-radius:13px;padding:10px;margin-top:12px}.preview-wrap canvas{width:100%;height:auto;display:block;border-radius:8px}
+.note{font-size:12px;color:var(--muted);margin-top:12px}.status{color:var(--cyan);font-size:13px;min-height:20px}
+footer{text-align:center;padding:25px;color:var(--muted);border-top:1px solid var(--line);font-size:13px}
+@media(max-width:760px){.tools{grid-template-columns:1fr}.wide{grid-column:auto}header{position:static}.card{padding:18px}main{padding-top:20px}}
+</style>
 </head>
 <body>
-  <h1>Hitesh Creator Studio</h1>
-  <h2>Free YouTube SEO Tools</h2>
-  <p>Generate YouTube video titles, descriptions, keywords and hashtags for your videos.</p>
-  <a href="https://script.google.com/macros/s/AKfycbzkCiYnOA9v3D5h4_GIuBlIk4GwEOKO08DRJ80qdNMyhcAFMFHEHXT9YN77QbCMT8nV/exec">
-    Open YouTube SEO Generator
-  </a>
+<header><div class="brand">HITESH <span>CREATOR STUDIO</span></div><div class="tag">Simple tools for your next YouTube video</div></header>
+<main>
+<section class="hero"><div class="eyebrow">Creator toolkit</div><h1>Make your next video <em>stand out.</em></h1><p>Create video title ideas, descriptions, keywords and hashtags, then design a simple 16:9 thumbnail. Free to use in your browser.</p></section>
+<div class="tools">
+<section class="card wide">
+<h2>✨ YouTube SEO Generator</h2><p class="sub">Enter your video topic and choose a language to create a useful SEO draft.</p>
+<label for="topic">Video topic</label><input id="topic" placeholder="Example: How to make a viral mini vlog">
+<label for="lang">Output language</label><select id="lang"><option value="English">English</option><option value="Hindi">Hindi</option><option value="Hinglish">Hinglish</option></select>
+<label for="channel">Channel name (optional)</label><input id="channel" placeholder="Hitesh ka daily vlog">
+<button id="generate">Generate SEO</button>
+<div class="output" id="seoOutput" aria-live="polite"></div>
+<p class="note">Note: This free version creates template-based suggestions in your browser. It does not fetch live YouTube trends or guarantee views.</p>
+</section>
+<section class="card wide">
+<h2>🎨 Thumbnail Maker</h2><p class="sub">Create a basic 16:9 thumbnail. Add your own photo as the background if you like.</p>
+<div class="tools" style="gap:12px">
+<div><label for="thumbTitle">Thumbnail text</label><input id="thumbTitle" value="MY NEW VIDEO!">
+<label for="thumbSub">Small subtitle</label><input id="thumbSub" value="WATCH NOW">
+<label for="thumbColor">Background colour</label><input id="thumbColor" type="color" value="#5638c9">
+<label for="photo">Upload background photo (optional)</label><input id="photo" type="file" accept="image/*">
+<div class="actions"><button id="drawThumb">Update thumbnail</button><button class="secondary" id="downloadThumb">Download PNG</button></div>
+</div>
+<div class="preview-wrap"><canvas id="thumb" width="1280" height="720"></canvas></div>
+</div>
+<p class="note">Tip: Keep thumbnail text short and easy to read on a phone.</p>
+</section>
+<section class="card"><h2>📝 Quick title tips</h2><p class="sub">A useful checklist before publishing.</p><ul style="color:#dce4ff;padding-left:20px"><li>Put the main topic near the beginning.</li><li>Make the promise clear and honest.</li><li>Avoid misleading clickbait.</li><li>Use a clear face or subject in the thumbnail.</li></ul></section>
+<section class="card"><h2>📈 Before you publish</h2><p class="sub">A simple upload checklist.</p><ul style="color:#dce4ff;padding-left:20px"><li>Check spelling in title and description.</li><li>Add only relevant keywords and hashtags.</li><li>Choose the correct audience setting.</li><li>Review the thumbnail on mobile size.</li></ul></section>
+</div>
+</main>
+<footer>© <span id="year"></span> Hitesh Creator Studio · Made for creators</footer>
+<script>
+const $=id=>document.getElementById(id);
+const clean=s=>s.trim().replace(/\s+/g,' ');
+function makeSEO(){
+ const topic=clean($('topic').value),lang=$('lang').value,channel=clean($('channel').value);
+ if(!topic){$('seoOutput').innerHTML='<div class="status">Please enter your video topic first.</div>';return}
+ const words=topic.split(' ').filter(Boolean),short=words.slice(0,7).join(' ');
+ const title=lang==='Hindi'?topic+' | शानदार वीडियो जरूर देखें':lang==='Hinglish'?topic+' | Full Video | Hitesh Vlog':topic+' | Tips, Ideas & Guide';
+ const description=lang==='Hindi'?'इस वीडियो में हम '+topic+' के बारे में जानेंगे। वीडियो पसंद आए तो Like, Share और Subscribe करें।':lang==='Hinglish'?'Aaj ke video mein '+topic+' ke baare mein baat karenge. Video pasand aaye to Like, Share aur Subscribe karein.':'In this video, we explore '+topic+'. Watch till the end, and if you find it helpful, like, share and subscribe for more videos.';
+ const base=[...words, 'youtube video', 'youtube shorts', 'video ideas', 'creator tips', 'vlog'];
+ const keywords=[...new Set(base.map(x=>x.toLowerCase()))].slice(0,15).join(', ');
+ const tags=['#'+words.slice(0,3).join('').replace(/[^a-z0-9]/gi,''),'#YouTube','#Shorts','#VideoIdeas','#'+(channel||'CreatorStudio').replace(/\s+/g,'')].join(' ');
+ const items=[['TITLE',title],['DESCRIPTION',description+(channel?'\n\nChannel: '+channel:'')],['KEYWORDS',keywords],['HASHTAGS',tags]];
+ $('seoOutput').innerHTML=items.map(([k,v])=>'<div><div class="outhead"><span>'+k+'</span><button class="copy" data-copy="'+encodeURIComponent(v)+'">Copy</button></div><div class="outbox"></div></div>').join('');
+ [...$('seoOutput').querySelectorAll('.outbox')].forEach((el,i)=>el.textContent=items[i][1]);
+ $('seoOutput').querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>copyText(decodeURIComponent(b.dataset.copy),b)));
+}
+async function copyText(text,btn){try{await navigator.clipboard.writeText(text);btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1200)}catch(e){btn.textContent='Select and copy';}}
+$('generate').addEventListener('click',makeSEO);
+let photoImage=null;
+$('photo').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const url=URL.createObjectURL(f);const img=new Image();img.onload=()=>{photoImage=img;drawThumbnail()};img.src=url});
+function drawThumbnail(){
+ const c=$('thumb'),ctx=c.getContext('2d'),color=$('thumbColor').value;
+ if(photoImage){const scale=Math.max(c.width/photoImage.width,c.height/photoImage.height),w=photoImage.width*scale,h=photoImage.height*scale;ctx.drawImage(photoImage,(c.width-w)/2,(c.height-h)/2,w,h);ctx.fillStyle='rgba(0,0,0,.48)';ctx.fillRect(0,0,c.width,c.height)}
+ else{const g=ctx.createLinearGradient(0,0,c.width,c.height);g.addColorStop(0,color);g.addColorStop(1,'#10182f');ctx.fillStyle=g;ctx.fillRect(0,0,c.width,c.height)}
+ ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(0,0,c.width,c.height);
+ const title=clean($('thumbTitle').value)||'YOUR VIDEO';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#000';ctx.shadowBlur=18;ctx.fillStyle='#fff';ctx.font='900 92px system-ui';let lines=[];let line='';for(const word of title.split(' ')){const test=line?line+' '+word:word;if(ctx.measureText(test).width>1080&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);lines=lines.slice(0,3);const start=360-(lines.length-1)*58;lines.forEach((t,i)=>ctx.fillText(t,640,start+i*116,1100));ctx.shadowBlur=0;
+ const sub=clean($('thumbSub').value);if(sub){ctx.fillStyle='#35d7d0';ctx.font='800 34px system-ui';ctx.fillText(sub.toUpperCase(),640,620,1100)}
+}
+$('drawThumb').addEventListener('click',drawThumbnail);
+$('downloadThumb').addEventListener('click',()=>{drawThumbnail();const a=document.createElement('a');a.download='hitesh-creator-thumbnail.png';a.href=$('thumb').toDataURL('image/png');a.click()});
+$('thumbTitle').addEventListener('input',drawThumbnail);$('thumbSub').addEventListener('input',drawThumbnail);$('thumbColor').addEventListener('input',drawThumbnail);
+$('year').textContent=new Date().getFullYear();drawThumbnail();
+</script>
 </body>
 </html>
